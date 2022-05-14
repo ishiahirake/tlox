@@ -1,0 +1,11 @@
+{
+  "name": "tlox",
+  "version": "1.0.0",
+  "description": "TypeScript implementation of lox language.",
+  "main": "index.js",
+  "author": "ishiahirake <ishiahirake@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
