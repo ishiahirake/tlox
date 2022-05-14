@@ -6,7 +6,7 @@
   "author": "ishiahirake <ishiahirake@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "tlox": "ts-node src/lox.ts"
+    "lox": "ts-node src/lox.ts"
   },
   "devDependencies": {
     "@types/node": "^17.0.33",

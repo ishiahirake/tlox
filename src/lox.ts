@@ -1,3 +1,6 @@
+import { readFile } from "fs/promises"
+import * as readline from "readline"
+
 function main() {
   const args = process.argv.slice(2)
   if (args.length > 1) {
@@ -9,12 +12,35 @@ function main() {
     runPrompt()
   }
 }
-function runFile(arg0: string) {
-  throw new Error("Function not implemented.")
+
+async function runFile(path: string) {
+  const source = await readFile(path, { encoding: "utf8" })
+  run(source)
 }
 
-function runPrompt() {
-  throw new Error("Function not implemented.")
+async function runPrompt() {
+  console.log("Use ctrl-c or ctrl-d to exit.\n")
+  while (true) {
+    const input = await prompt("> ")
+    run(input)
+  }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+})
+
+function prompt(message: string) {
+  return new Promise<string>((resolve) => {
+    rl.question(message, (input) => {
+      resolve(input)
+    })
+  })
+}
+
+async function run(source: string) {
+  console.log(`Run with source: ${source}`)
 }
 
 // run main
