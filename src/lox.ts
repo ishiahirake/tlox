@@ -1,3 +1,5 @@
+import { shared } from "./globals"
+import { Scanner } from "./scanner"
 import { readFile } from "fs/promises"
 import * as readline from "readline"
 
@@ -16,6 +18,10 @@ function main() {
 async function runFile(path: string) {
   const source = await readFile(path, { encoding: "utf8" })
   run(source)
+
+  if (shared.hadError) {
+    process.exit(65)
+  }
 }
 
 async function runPrompt() {
@@ -23,6 +29,8 @@ async function runPrompt() {
   while (true) {
     const input = await prompt("> ")
     run(input)
+
+    shared.hadError = false
   }
 }
 
@@ -40,7 +48,13 @@ function prompt(message: string) {
 }
 
 async function run(source: string) {
-  console.log(`Run with source: ${source}`)
+  const scanner = new Scanner(source)
+  const tokens = scanner.scanTokens()
+
+  //
+  for (const token of tokens) {
+    console.log(token)
+  }
 }
 
 // run main
