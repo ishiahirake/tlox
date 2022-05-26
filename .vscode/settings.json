@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
         "tlox"
-    ]
+    ],
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
 }
