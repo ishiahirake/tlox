@@ -28,22 +28,21 @@ async function defineAst(outputDir: string, baseName: string, types: string[]) {
     await file.write(data + os.EOL)
   }
 
-  await writeln(`interface ${baseName} {}`)
+  await writeln(`interface ${baseName} {`)
+  await writeln("  accept<R>(visitor: Visitor<R>): R")
+  await writeln("}")
 
   for (const type of types) {
     const [className, fields] = type.split(":").map((v) => v.trim())
     await defineType(writeln, baseName, className, fields)
   }
 
+  await defineVisitor(writeln, baseName, types)
+
   await file.close()
 }
 
-async function defineType(
-  writeln: Writeln,
-  baseName: string,
-  className: string,
-  fields: string
-) {
+async function defineType(writeln: Writeln, baseName: string, className: string, fields: string) {
   await writeln("")
   await writeln(`class ${className} implements ${baseName} {`)
 
@@ -57,6 +56,23 @@ async function defineType(
       writeln(`    public readonly ${name}: ${type},`)
     })
   await writeln("  ) {}")
+
+  await writeln("")
+  await writeln("  accept<R>(visitor: Visitor<R>): R {")
+  await writeln(`    return visitor.visit${className}${baseName}(this)`)
+  await writeln("  }")
+
+  await writeln("}")
+}
+
+async function defineVisitor(writeln: Writeln, baseName: string, types: string[]) {
+  await writeln("")
+  await writeln("interface Visitor<R> {")
+
+  for (const type of types) {
+    const [typeName] = type.split(":").map((v) => v.trim())
+    await writeln(`  visit${typeName}${baseName}(${baseName.toLowerCase()}: ${typeName}): R`)
+  }
 
   await writeln("}")
 }
