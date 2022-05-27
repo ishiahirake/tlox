@@ -1,86 +1,5 @@
 import { error } from "./utils"
-
-enum TokenType {
-  // Single-character tokens.
-  LEFT_PAREN,
-  RIGHT_PAREN,
-  LEFT_BRACE,
-  RIGHT_BRACE,
-  COMMA,
-  DOT,
-  MINUS,
-  PLUS,
-  SEMICOLON,
-  SLASH,
-  STAR,
-
-  // One or two character tokens.
-  BANG,
-  BANG_EQUAL,
-  EQUAL,
-  EQUAL_EQUAL,
-  GREATER,
-  GREATER_EQUAL,
-  LESS,
-  LESS_EQUAL,
-
-  // Literals.
-  IDENTIFIER,
-  STRING,
-  NUMBER,
-
-  // Keywords.
-  AND,
-  CLASS,
-  ELSE,
-  FALSE,
-  FUN,
-  FOR,
-  IF,
-  NIL,
-  OR,
-  PRINT,
-  RETURN,
-  SUPER,
-  THIS,
-  TRUE,
-  VAR,
-  WHILE,
-
-  EOF,
-}
-
-const keywords: { [key: string]: TokenType } = {
-  and: TokenType.AND,
-  class: TokenType.CLASS,
-  else: TokenType.ELSE,
-  false: TokenType.FALSE,
-  for: TokenType.FOR,
-  fun: TokenType.FUN,
-  if: TokenType.IF,
-  nil: TokenType.NIL,
-  or: TokenType.OR,
-  print: TokenType.PRINT,
-  return: TokenType.RETURN,
-  super: TokenType.SUPER,
-  this: TokenType.THIS,
-  true: TokenType.TRUE,
-  var: TokenType.VAR,
-  while: TokenType.WHILE,
-} as const
-
-class Token {
-  constructor(
-    public readonly type: TokenType,
-    public readonly lexeme: string,
-    public readonly literal: any,
-    public readonly line: number
-  ) {}
-
-  toString(): string {
-    return `${this.type} ${this.lexeme} ${this.literal}`
-  }
-}
+import { Token, TokenType, keywords } from "./Token"
 
 export class Scanner {
   private tokens: Token[] = []
@@ -150,9 +69,7 @@ export class Scanner {
         this.addToken(this.match("=") ? TokenType.LESS_EQUAL : TokenType.LESS)
         break
       case ">":
-        this.addToken(
-          this.match("=") ? TokenType.GREATER_EQUAL : TokenType.GREATER
-        )
+        this.addToken(this.match("=") ? TokenType.GREATER_EQUAL : TokenType.GREATER)
         break
       case "/":
         if (this.match("/")) {
@@ -271,10 +188,7 @@ export class Scanner {
       }
     }
 
-    this.addToken(
-      TokenType.NUMBER,
-      parseFloat(this.source.substring(this.start, this.current))
-    )
+    this.addToken(TokenType.NUMBER, parseFloat(this.source.substring(this.start, this.current)))
   }
 
   identifier() {
@@ -293,12 +207,7 @@ export class Scanner {
     this.addRawToken(type, text, literal)
   }
 
-  addRawToken(
-    type: TokenType,
-    lexeme: string,
-    literal: any = null,
-    line = this.line
-  ) {
+  addRawToken(type: TokenType, lexeme: string, literal: any = null, line = this.line) {
     this.tokens.push(new Token(type, lexeme, literal, line))
   }
 }

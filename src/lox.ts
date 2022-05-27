@@ -1,5 +1,5 @@
 import { shared } from "./globals"
-import { Scanner } from "./scanner"
+import { Scanner } from "./Scanner"
 import { readFile } from "fs/promises"
 import * as readline from "readline"
 

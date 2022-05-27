@@ -28,7 +28,10 @@ async function defineAst(outputDir: string, baseName: string, types: string[]) {
     await file.write(data + os.EOL)
   }
 
-  await writeln(`interface ${baseName} {`)
+  await writeln('import { Token } from "./Token"')
+  await writeln("")
+
+  await writeln(`export interface ${baseName} {`)
   await writeln("  accept<R>(visitor: Visitor<R>): R")
   await writeln("}")
 
@@ -44,17 +47,14 @@ async function defineAst(outputDir: string, baseName: string, types: string[]) {
 
 async function defineType(writeln: Writeln, baseName: string, className: string, fields: string) {
   await writeln("")
-  await writeln(`class ${className} implements ${baseName} {`)
+  await writeln(`export class ${className} implements ${baseName} {`)
 
   // Constructor with public readonly fields.
   await writeln("  constructor(")
-  fields
-    .split(",")
-    .map((v) => v.trim())
-    .forEach((field) => {
-      const [type, name] = field.split(" ")
-      writeln(`    public readonly ${name}: ${type},`)
-    })
+  for (const field of fields.split(",").map((v) => v.trim())) {
+    const [type, name] = field.split(" ")
+    await writeln(`    public readonly ${name}: ${type},`)
+  }
   await writeln("  ) {}")
 
   await writeln("")
@@ -67,7 +67,7 @@ async function defineType(writeln: Writeln, baseName: string, className: string,
 
 async function defineVisitor(writeln: Writeln, baseName: string, types: string[]) {
   await writeln("")
-  await writeln("interface Visitor<R> {")
+  await writeln("export interface Visitor<R> {")
 
   for (const type of types) {
     const [typeName] = type.split(":").map((v) => v.trim())
