@@ -1,5 +1,4 @@
 import { AstPrinter } from "./AstPrinter"
-import { Expr } from "./Expr"
 import { Parser } from "./Parser"
 import { shared } from "./globals"
 import { readFile } from "fs/promises"
