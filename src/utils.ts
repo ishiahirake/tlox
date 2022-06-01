@@ -1,4 +1,4 @@
-import { Token, TokenType } from "./Token"
+import { Token } from "./Token"
 import { shared } from "./globals"
 
 // Error handling
@@ -13,7 +13,7 @@ export function error(data: number | Token, message: string) {
   // data is Token
   else {
     const token = data
-    if (token.type === TokenType.EOF) {
+    if (token.type === "EOF") {
       report(token.line, " at end", message)
     } else {
       report(token.line, ` at '${token.lexeme}'`, message)

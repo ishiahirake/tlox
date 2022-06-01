@@ -24,7 +24,7 @@ export class Parser {
   equality(): Expr.Expr {
     let expr = this.comparison()
 
-    while (this.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
+    while (this.match("BANG_EQUAL", "EQUAL_EQUAL")) {
       const operator = this.previous()
       const right = this.comparison()
       expr = new Expr.Binary(expr, operator, right)
@@ -68,7 +68,7 @@ export class Parser {
   }
 
   isAtEnd(): boolean {
-    return this.peek().type === TokenType.EOF
+    return this.peek().type === "EOF"
   }
 
   peek(): Token {
@@ -88,19 +88,19 @@ export class Parser {
     this.advance()
 
     while (!this.isAtEnd()) {
-      if (this.previous().type === TokenType.SEMICOLON) {
+      if (this.previous().type === "SEMICOLON") {
         return
       }
 
       switch (this.peek().type) {
-        case TokenType.CLASS:
-        case TokenType.FUN:
-        case TokenType.VAR:
-        case TokenType.FOR:
-        case TokenType.IF:
-        case TokenType.WHILE:
-        case TokenType.PRINT:
-        case TokenType.RETURN:
+        case "CLASS":
+        case "FUN":
+        case "VAR":
+        case "FOR":
+        case "IF":
+        case "WHILE":
+        case "PRINT":
+        case "RETURN":
           return
       }
 
@@ -118,9 +118,7 @@ export class Parser {
   comparison(): Expr.Expr {
     let expr = this.term()
 
-    while (
-      this.match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL)
-    ) {
+    while (this.match("GREATER", "GREATER_EQUAL", "LESS", "LESS_EQUAL")) {
       const operator = this.previous()
       const right = this.term()
       expr = new Expr.Binary(expr, operator, right)
@@ -132,7 +130,7 @@ export class Parser {
   term(): Expr.Expr {
     let expr = this.factor()
 
-    while (this.match(TokenType.MINUS, TokenType.PLUS)) {
+    while (this.match("MINUS", "PLUS")) {
       const operator = this.previous()
       const right = this.factor()
       expr = new Expr.Binary(expr, operator, right)
@@ -144,7 +142,7 @@ export class Parser {
   factor(): Expr.Expr {
     let expr = this.unary()
 
-    while (this.match(TokenType.SLASH, TokenType.STAR)) {
+    while (this.match("SLASH", "STAR")) {
       const operator = this.previous()
       const right = this.unary()
       expr = new Expr.Binary(expr, operator, right)
@@ -160,7 +158,7 @@ export class Parser {
    *                | primary ;
    */
   unary(): Expr.Expr {
-    if (this.match(TokenType.BANG, TokenType.MINUS)) {
+    if (this.match("BANG", "MINUS")) {
       const operator = this.previous()
       const right = this.unary()
       return new Expr.Unary(operator, right)
@@ -174,23 +172,23 @@ export class Parser {
    *                | "(" expression ")" ;
    */
   primary(): Expr.Expr {
-    if (this.match(TokenType.FALSE)) {
+    if (this.match("FALSE")) {
       return new Expr.Literal(false)
     }
-    if (this.match(TokenType.TRUE)) {
+    if (this.match("TRUE")) {
       return new Expr.Literal(true)
     }
-    if (this.match(TokenType.NIL)) {
+    if (this.match("NIL")) {
       return new Expr.Literal(null)
     }
 
-    if (this.match(TokenType.NUMBER, TokenType.STRING)) {
+    if (this.match("NUMBER", "STRING")) {
       return new Expr.Literal(this.previous().literal)
     }
 
-    if (this.match(TokenType.LEFT_PAREN)) {
+    if (this.match("LEFT_PAREN")) {
       const expr = this.expression()
-      this.consume(TokenType.RIGHT_BRACE, "Expect ')' after expression.")
+      this.consume("RIGHT_BRACE", "Expect ')' after expression.")
       return new Expr.Grouping(expr)
     }
 

@@ -17,7 +17,7 @@ export class Scanner {
       this.scanToken()
     }
 
-    this.addRawToken(TokenType.EOF, "")
+    this.addRawToken("EOF", "")
 
     return this.tokens
   }
@@ -30,46 +30,46 @@ export class Scanner {
     const c = this.advance()
     switch (c) {
       case "(":
-        this.addToken(TokenType.LEFT_PAREN)
+        this.addToken("LEFT_PAREN")
         break
       case ")":
-        this.addToken(TokenType.RIGHT_PAREN)
+        this.addToken("RIGHT_PAREN")
         break
       case "{":
-        this.addToken(TokenType.LEFT_BRACE)
+        this.addToken("LEFT_BRACE")
         break
       case "}":
-        this.addToken(TokenType.RIGHT_BRACE)
+        this.addToken("RIGHT_BRACE")
         break
       case ",":
-        this.addToken(TokenType.COMMA)
+        this.addToken("COMMA")
         break
       case ".":
-        this.addToken(TokenType.DOT)
+        this.addToken("DOT")
         break
       case "-":
-        this.addToken(TokenType.MINUS)
+        this.addToken("MINUS")
         break
       case "+":
-        this.addToken(TokenType.PLUS)
+        this.addToken("PLUS")
         break
       case ";":
-        this.addToken(TokenType.SEMICOLON)
+        this.addToken("SEMICOLON")
         break
       case "*":
-        this.addToken(TokenType.STAR)
+        this.addToken("STAR")
         break
       case "!":
-        this.addToken(this.match("=") ? TokenType.BANG_EQUAL : TokenType.BANG)
+        this.addToken(this.match("=") ? "BANG_EQUAL" : "BANG")
         break
       case "=":
-        this.addToken(this.match("=") ? TokenType.EQUAL_EQUAL : TokenType.EQUAL)
+        this.addToken(this.match("=") ? "EQUAL_EQUAL" : "EQUAL")
         break
       case "<":
-        this.addToken(this.match("=") ? TokenType.LESS_EQUAL : TokenType.LESS)
+        this.addToken(this.match("=") ? "LESS_EQUAL" : "LESS")
         break
       case ">":
-        this.addToken(this.match("=") ? TokenType.GREATER_EQUAL : TokenType.GREATER)
+        this.addToken(this.match("=") ? "GREATER_EQUAL" : "GREATER")
         break
       case "/":
         if (this.match("/")) {
@@ -78,7 +78,7 @@ export class Scanner {
             this.advance()
           }
         } else {
-          this.addToken(TokenType.SLASH)
+          this.addToken("SLASH")
         }
         break
 
@@ -170,7 +170,7 @@ export class Scanner {
 
     // Trim the surrounding quotes.
     const value = this.source.substring(this.start + 1, this.current - 1)
-    this.addToken(TokenType.STRING, value)
+    this.addToken("STRING", value)
   }
 
   number() {
@@ -188,7 +188,7 @@ export class Scanner {
       }
     }
 
-    this.addToken(TokenType.NUMBER, parseFloat(this.source.substring(this.start, this.current)))
+    this.addToken("NUMBER", parseFloat(this.source.substring(this.start, this.current)))
   }
 
   identifier() {
@@ -197,7 +197,7 @@ export class Scanner {
     }
 
     const text = this.source.substring(this.start, this.current)
-    const type = keywords[text] ?? TokenType.IDENTIFIER
+    const type = keywords[text] ?? "IDENTIFIER"
 
     this.addToken(type)
   }
