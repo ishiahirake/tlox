@@ -1,12 +1,12 @@
 import { AstPrinter } from "../src/AstPrinter"
 import * as Expr from "../src/Expr"
-import { Token, TokenType } from "../src/Token"
+import { Token } from "../src/Token"
 
 describe("print", () => {
   it("case 1", () => {
     const expression: Expr.Expr = new Expr.Binary(
-      new Expr.Unary(new Token(TokenType.MINUS, "-", null, 1), new Expr.Literal(123)),
-      new Token(TokenType.STAR, "*", null, 1),
+      new Expr.Unary(new Token("MINUS", "-", null, 1), new Expr.Literal(123)),
+      new Token("STAR", "*", null, 1),
       new Expr.Grouping(new Expr.Literal(45.67))
     )
 
