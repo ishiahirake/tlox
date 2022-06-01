@@ -25,7 +25,7 @@ export class Grouping implements Expr {
 }
 
 export class Literal implements Expr {
-  constructor(public readonly value: Object) {}
+  constructor(public readonly value: any) {}
 
   accept<R>(visitor: Visitor<R>): R {
     return visitor.visitLiteralExpr(this)

@@ -1,7 +1,10 @@
+import { AstPrinter } from "./AstPrinter"
+import { Expr } from "./Expr"
+import { Parser } from "./Parser"
 import { shared } from "./globals"
-import { Scanner } from "./Scanner"
 import { readFile } from "fs/promises"
 import * as readline from "readline"
+import { Scanner } from "./Scanner"
 
 function main() {
   const args = process.argv.slice(2)
@@ -51,10 +54,14 @@ async function run(source: string) {
   const scanner = new Scanner(source)
   const tokens = scanner.scanTokens()
 
-  //
-  for (const token of tokens) {
-    console.log(token)
+  const parser = new Parser(tokens)
+  const expression = parser.parse()
+
+  if (shared.hadError || !expression) {
+    return
   }
+
+  console.log(new AstPrinter().print(expression))
 }
 
 // run main
