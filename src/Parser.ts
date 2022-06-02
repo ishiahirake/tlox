@@ -4,7 +4,7 @@ import { error } from "./utils"
 
 class ParseError extends Error {}
 
-export class Parser {
+class Parser {
   private current = 0
 
   constructor(private tokens: Token[]) {}
@@ -194,4 +194,8 @@ export class Parser {
 
     throw this.error(this.peek(), "Expect expression.")
   }
+}
+
+export function parse(tokens: Token[]): Expr.Expr | null {
+  return new Parser(tokens).parse()
 }

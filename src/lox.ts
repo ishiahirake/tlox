@@ -1,9 +1,9 @@
-import { AstPrinter } from "./AstPrinter"
-import { Parser } from "./Parser"
+import { parse } from "./Parser"
 import { shared } from "./globals"
 import { readFile } from "fs/promises"
 import * as readline from "readline"
-import { Scanner } from "./Scanner"
+import { scan } from "./Scanner"
+import { interpret } from "./Interpreter"
 
 function main() {
   const args = process.argv.slice(2)
@@ -24,6 +24,9 @@ async function runFile(path: string) {
   if (shared.hadError) {
     process.exit(65)
   }
+  if (shared.hadRuntimeError) {
+    process.exit(70)
+  }
 }
 
 async function runPrompt() {
@@ -43,24 +46,19 @@ const rl = readline.createInterface({
 
 function prompt(message: string) {
   return new Promise<string>((resolve) => {
-    rl.question(message, (input) => {
-      resolve(input)
-    })
+    rl.question(message, resolve)
   })
 }
 
 async function run(source: string) {
-  const scanner = new Scanner(source)
-  const tokens = scanner.scanTokens()
-
-  const parser = new Parser(tokens)
-  const expression = parser.parse()
+  const tokens = scan(source)
+  const expression = parse(tokens)
 
   if (shared.hadError || !expression) {
     return
   }
 
-  console.log(new AstPrinter().print(expression))
+  interpret(expression)
 }
 
 // run main

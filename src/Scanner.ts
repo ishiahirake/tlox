@@ -1,7 +1,7 @@
 import { error } from "./utils"
 import { Token, TokenType, keywords } from "./Token"
 
-export class Scanner {
+class Scanner {
   private tokens: Token[] = []
 
   private start = 0
@@ -210,4 +210,8 @@ export class Scanner {
   addRawToken(type: TokenType, lexeme: string, literal: any = null, line = this.line) {
     this.tokens.push(new Token(type, lexeme, literal, line))
   }
+}
+
+export function scan(source: string): Token[] {
+  return new Scanner(source).scanTokens()
 }
