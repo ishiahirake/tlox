@@ -1,3 +1,4 @@
+import { RuntimeError } from "./RuntimeError"
 import { Token } from "./Token"
 import { shared } from "./globals"
 
@@ -21,9 +22,28 @@ export function error(data: number | Token, message: string) {
   }
 }
 
+export function runtimeError(error: RuntimeError) {
+  console.log(`${error.message}\n[line ${error.token.line}]`)
+  shared.hadRuntimeError = true
+}
+
 export function report(line: number, where: string, message: string) {
   console.log(`[line ${line}] Error ${where}: ${message}`)
 
   // TODO: throw Error
   shared.hadError = true
+}
+
+//
+
+export function isString(val: string): val is string {
+  return typeof val === "string"
+}
+
+export function isNumber(val: any): val is number {
+  return typeof val === "number"
+}
+
+export function isBoolean(val: any): val is boolean {
+  return typeof val === "boolean"
 }
